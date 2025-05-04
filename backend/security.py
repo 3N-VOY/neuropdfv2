@@ -10,16 +10,6 @@ from io import BytesIO
 import firebase_admin
 from firebase_admin import credentials, auth, firestore
 import logging
-try:
-    import magic
-except ImportError:
-    # Define our own simple PDF detection
-    class MagicMock:
-        def from_buffer(self, content, mime=False):
-            if content.startswith(b'%PDF-'):
-                return 'application/pdf' if mime else 'PDF document'
-            return 'application/octet-stream' if mime else 'Unknown'
-    magic = MagicMock()
 
 # Setup simple logging
 logging.basicConfig(level=logging.INFO)
@@ -65,6 +55,10 @@ api_key_header = APIKeyHeader(name="X-API-Key")
 
 # Store API keys
 api_keys: Dict[str, Dict] = {}
+
+def is_pdf(file_content: bytes) -> bool:
+    """Check if the file content is a PDF by examining the header."""
+    return file_content.startswith(b'%PDF-')
 
 # Function to verify Firebase tokens
 def verify_firebase_token(token):
@@ -120,9 +114,8 @@ def check_file_size(file_size: int):
         )
 
 def validate_pdf_content(file_content: bytes):
-    # Check MIME type
-    mime_type = magic.from_buffer(file_content, mime=True)
-    if mime_type not in ALLOWED_MIME_TYPES:
+    # Check if it's a PDF by header
+    if not is_pdf(file_content):
         raise HTTPException(
             status_code=400,
             detail="Invalid file type. Only PDF files are allowed."

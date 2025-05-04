@@ -5,12 +5,22 @@ from fastapi.security import APIKeyHeader
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 import os
-import magic
 import PyPDF2
 from io import BytesIO
 import firebase_admin
 from firebase_admin import credentials, auth, firestore
 import logging
+try:
+    import magic
+except ImportError:
+    # Fallback for environments where python-magic isn't available
+    class FallbackMagic:
+        def from_buffer(self, content, mime=False):
+            # Simple PDF detection based on header
+            if content.startswith(b'%PDF-'):
+                return 'application/pdf' if mime else 'PDF document'
+            return 'application/octet-stream' if mime else 'Unknown'
+    magic = FallbackMagic()
 
 # Setup simple logging
 logging.basicConfig(level=logging.INFO)

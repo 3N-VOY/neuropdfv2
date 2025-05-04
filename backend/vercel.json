@@ -1,7 +1,7 @@
 {
     "version": 2,
     "builds": [
-      { "src": "main.py", "use": "@vercel/python" }
+      { "src": "main.py", "use": "@vercel/python", "config": { "pip_requirements": "requirements-vercel.txt" } }
     ],
     "routes": [
       { "src": "/(.*)", "dest": "main.py" }

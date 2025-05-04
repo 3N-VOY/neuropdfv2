@@ -13,14 +13,13 @@ import logging
 try:
     import magic
 except ImportError:
-    # Fallback for environments where python-magic isn't available
-    class FallbackMagic:
+    # Define our own simple PDF detection
+    class MagicMock:
         def from_buffer(self, content, mime=False):
-            # Simple PDF detection based on header
             if content.startswith(b'%PDF-'):
                 return 'application/pdf' if mime else 'PDF document'
             return 'application/octet-stream' if mime else 'Unknown'
-    magic = FallbackMagic()
+    magic = MagicMock()
 
 # Setup simple logging
 logging.basicConfig(level=logging.INFO)

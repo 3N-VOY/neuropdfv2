@@ -49,8 +49,35 @@ __pycache__/
 /backend/.env
 /frontend/.env
 
-# Firebase
-*.json
+
+# Dependencies
+node_modules/
+node_modules/
+__pycache__/
+*.py[cod]
+*$py.class
+/backend/venv/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+
+# Production
+build/
+dist/
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+/backend/.env
+.env
+
+
+
 
 # Logs
 npm-debug.log*

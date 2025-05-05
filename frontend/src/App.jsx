@@ -26,7 +26,7 @@ function App() {
   const [authModal, setAuthModal] = useState({ isOpen: false, mode: "signin" });
   const fingerprint = useFingerprint();
 
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://127.0.0.1:8000";
 
   const handleGoogleSignIn = async () => {
     try {

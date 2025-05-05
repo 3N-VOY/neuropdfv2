@@ -7,6 +7,8 @@ export function AuthModal({ isOpen, onClose, onSubmit, onGoogleSignIn, mode }) {
   const [error, setError] = useState('');
 
   if (!isOpen) return null;
+  console.log('API Key:', import.meta.env.VITE_FIREBASE_API_KEY);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();

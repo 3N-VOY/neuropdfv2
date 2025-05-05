@@ -10,17 +10,32 @@ from io import BytesIO
 import firebase_admin
 from firebase_admin import credentials, auth, firestore
 import logging
-
+from dotenv import load_dotenv
+import base64
+import json
+# Load environment variables
+load_dotenv()
 # Setup simple logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("security")
 
 # Initialize Firebase Admin with credentials from environment variable
+# Initialize Firebase Admin with credentials from environment variable
 firebase_creds_json = os.getenv("FIREBASE_CREDENTIALS_JSON")
+if not firebase_creds_json:
+    firebase_creds_json = os.getenv("FIREBASE_CREDENTIALS_PATH")
+
 if firebase_creds_json:
     try:
-        import json
-        cred = credentials.Certificate(json.loads(firebase_creds_json))
+        # Try to decode as base64 first
+        try:
+            decoded_bytes = base64.b64decode(firebase_creds_json)
+            cred_dict = json.loads(decoded_bytes)
+            cred = credentials.Certificate(cred_dict)
+        except (base64.binascii.Error, json.JSONDecodeError):
+            # If base64 decoding or JSON fails, treat as a file path
+            cred = credentials.Certificate(firebase_creds_json)
+
         if not firebase_admin._apps:
             firebase_app = firebase_admin.initialize_app(cred)
         db = firestore.client()
@@ -28,16 +43,8 @@ if firebase_creds_json:
         print(f"Error initializing Firebase: {str(e)}")
         raise
 else:
-    # Fallback to file-based credentials for local development
-    firebase_creds_path = os.getenv("FIREBASE_CREDENTIALS_PATH")
-    try:
-        cred = credentials.Certificate(firebase_creds_path)
-        if not firebase_admin._apps:
-            firebase_app = firebase_admin.initialize_app(cred)
-        db = firestore.client()
-    except Exception as e:
-        print(f"Error initializing Firebase: {str(e)}")
-        raise
+    print("No Firebase credentials found in environment variables")
+    raise ValueError("Firebase credentials not found")
 
 # Initialize rate limiter
 limiter = Limiter(key_func=get_remote_address)

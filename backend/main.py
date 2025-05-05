@@ -61,7 +61,7 @@ if is_production:
         CORSMiddleware,
         allow_origins=frontend_urls,
         allow_credentials=True,
-        allow_methods=["GET", "POST"],
+        allow_methods=["GET", "POST", "OPTIONS", "PUT"],
         allow_headers=["Authorization", "Content-Type", "X-API-Key", "X-Device-Fingerprint"],
     )
 else:

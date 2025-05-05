@@ -37,7 +37,6 @@ __pycache__/
 /frontend/coverage/
 
 # Production
-/frontend/build/
 /frontend/dist/
 
 # Environment Variables

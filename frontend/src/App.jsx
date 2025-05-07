@@ -242,9 +242,9 @@ function App() {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setSidebarOpen(!sidebarOpen)}
-        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-gray-800 rounded-lg shadow-lg hover:bg-gray-700 transition-colors"
+        className="md:hidden fixed top-6 left-4 z-50 p-2 bg-gray-800/90 backdrop-blur rounded-lg shadow-lg hover:bg-gray-700 transition-colors"
       >
-        <Menu className="h-6 w-6" />
+        <Menu className="h-5 w-5" />
       </button>
 
       {/* Overlay for mobile sidebar */}
@@ -256,21 +256,21 @@ function App() {
       )}
 
       {/* Sidebar */}
-      <div
+  <div
         className={`md:relative fixed md:static top-0 left-0 w-[280px] bg-gray-800 border-r border-gray-700 z-50 transition-transform duration-300 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 h-full md:h-auto`}
       >
         <div className="p-4 h-full overflow-y-auto">
-          <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
-              <Files className="h-6 w-6 text-blue-400" />
-              <h2 className="text-xl font-semibold">Documents</h2>
+              <Files className="h-5 w-5 text-blue-400" />
+              <h2 className="text-lg font-semibold">Documents</h2>
             </div>
             {user ? (
               <button
                 onClick={handleLogout}
-                className="text-gray-400 hover:text-red-400 transition-colors"
+                className="text-gray-400 hover:text-red-400 transition-colors p-1"
                 title="Sign Out"
               >
                 <LogOut className="h-5 w-5" />
@@ -279,14 +279,14 @@ function App() {
               <div className="flex gap-2">
                 <button
                   onClick={() => setAuthModal({ isOpen: true, mode: "signin" })}
-                  className="text-gray-400 hover:text-green-400 transition-colors"
+                  className="text-gray-400 hover:text-green-400 transition-colors p-1"
                   title="Sign In"
                 >
                   <LogIn className="h-5 w-5" />
                 </button>
                 <button
                   onClick={() => setAuthModal({ isOpen: true, mode: "signup" })}
-                  className="text-sm text-gray-400 hover:text-blue-400 transition-colors"
+                  className="text-sm text-gray-400 hover:text-blue-400 transition-colors px-2 py-1"
                 >
                   Sign Up
                 </button>
@@ -303,18 +303,20 @@ function App() {
           {file ? (
             <div className="bg-gray-700 rounded-lg p-4 mb-4">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <FileText className="text-blue-400 flex-shrink-0" />
-                  <span className="font-medium truncate">{file.name}</span>
+                <div className="flex items-center gap-3 min-w-0">
+                  <FileText className="text-blue-400 flex-shrink-0 h-5 w-5" />
+                  <span className="font-medium truncate text-sm">
+                    {file.name}
+                  </span>
                 </div>
                 <button
                   onClick={removeFile}
-                  className="text-gray-400 hover:text-red-400 transition-colors flex-shrink-0"
+                  className="text-gray-400 hover:text-red-400 transition-colors flex-shrink-0 p-1 ml-2"
                 >
                   <Trash2 className="h-5 w-5" />
                 </button>
               </div>
-              <div className="mt-2 text-sm text-gray-400">
+              <div className="mt-2 text-xs text-gray-400">
                 {(file.size / 1024 / 1024).toFixed(2)} MB
               </div>
             </div>
@@ -327,12 +329,12 @@ function App() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-h-screen">
-        <header className="text-center py-6 md:py-8 px-4">
-          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
+      <div className="flex-1 flex flex-col min-h-screen md:ml-0">
+        <header className="text-center py-6 px-4 mt-2 md:mt-0">
+          <h1 className="text-2xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2 pl-8 md:pl-0">
             PDF Q&A Assistant
           </h1>
-          <p className="text-gray-400 text-sm md:text-base">
+          <p className="text-gray-400 text-sm md:text-base pl-8 md:pl-0">
             Upload a PDF and ask questions about its content
           </p>
         </header>
@@ -358,7 +360,9 @@ function App() {
             </div>
           )}
 
-          <div className="flex-1 bg-gray-800 rounded-lg shadow-xl border border-gray-700 flex flex-col">
+          <div className="flex-1 bg-gray-800 rounded-lg shadow-xl border border-gray-700 flex flex-col mb-safe">
+            H LYDIA TON PAIRNEI RE MALAKA -
+            YOUR IPHONE HAS BEEN HACKED!
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.map((message, index) => (
                 <div
@@ -368,7 +372,7 @@ function App() {
                   }`}
                 >
                   {message.type === "assistant" && (
-                    <Bot className="h-6 w-6 text-blue-400 flex-shrink-0" />
+                    <Bot className="h-5 w-5 text-blue-400 flex-shrink-0 mt-1" />
                   )}
                   <div
                     className={`rounded-lg p-3 max-w-[85%] md:max-w-[75%] break-words ${
@@ -384,14 +388,18 @@ function App() {
                 </div>
               ))}
               {loading && (
-                <div className="flex items-center gap-2 text-gray-400">
+                <div className="flex items-center gap-2 text-gray-400 animate-fade-in">
                   <Loader className="h-5 w-5 animate-spin" />
-                  <span>Processing...</span>
+                  <span className="text-sm">Processing...</span>
                 </div>
               )}
             </div>
 
-            <form onSubmit={handleSubmit} className="p-4 flex gap-2">
+            <form
+              onSubmit={handleSubmit}
+              className="p-4 flex gap-2 border-t border-gray-700 bg-gray-800/90 backdrop-blur sticky bottom-0"
+            > 
+  
               <input
                 type="text"
                 value={question}
@@ -401,15 +409,15 @@ function App() {
                     ? "Ask a question about the PDF..."
                     : "Please log in to ask questions"
                 }
-                className="flex-1 rounded-lg bg-gray-700 border border-gray-600 px-4 py-3 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-blue-400 text-sm md:text-base"
+                className="flex-1 rounded-lg bg-gray-700 border border-gray-600 px-4 py-2.5 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-blue-400 text-sm md:text-base"
                 disabled={!file || loading || !user}
               />
               <button
                 type="submit"
                 disabled={!file || !question.trim() || loading || !user}
-                className="bg-blue-500 text-white rounded-lg px-4 py-2 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+                className="bg-blue-500 text-white rounded-lg px-4 py-2.5 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0 active:scale-95"
               >
-                <Send className="h-5 w-5 md:h-6 md:w-6" />
+                <Send className="h-5 w-5" />
               </button>
             </form>
           </div>

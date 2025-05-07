@@ -4,7 +4,7 @@ A full-stack AI-powered web application that lets you upload a PDF and ask quest
 NLP techniques—Retrieval Augmented Generation (RAG), vector databases, and large language models (LLMs)—to provide accurate, 
 context-aware answers from your documents.
 
-Visit Live Website Link: neuropdf.alexanderxagoraris.com
+Visit Live Website Link: [NeuroPDF](neuropdf.alexanderxagoraris.com)
 
 ## Features
 

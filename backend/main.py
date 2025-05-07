@@ -44,8 +44,6 @@ logger.info(f"Starting application in {'PRODUCTION' if is_production else 'DEVEL
 
 # Initialize FastAPI app
 app = FastAPI(title="PDF Q&A API")
-app.state.limiter = limiter
-app.add_middleware(SlowAPIMiddleware)
 
 # Add middleware
 if is_production:
@@ -73,6 +71,12 @@ else:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    
+    
+app.state.limiter = limiter
+app.add_middleware(SlowAPIMiddleware)
+
+
 
 # Create a limiter based on IP address
 ip_limiter = Limiter(key_func=get_remote_address)

@@ -142,3 +142,162 @@ If you have questions or want to improve the project, feel free to open an issue
 
 ## Author
 Developed by 3N-VOY (Alexander Xagoraris)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+markdown
+Copy Code
+# AI-Powered PDF Q&A Assistant
+
+Welcome to the AI-Powered PDF Q&A Assistant repository! This project is a full-stack web application that enables users to upload PDF documents and interactively ask questions about their content using advanced AI techniques.
+
+---
+
+## Project Overview
+
+This application leverages state-of-the-art NLP technologies, including Retrieval Augmented Generation (RAG), vector databases, and large language models (LLMs), to provide accurate, context-aware answers grounded in the uploaded PDFs.
+
+---
+
+## Features
+
+- **PDF Upload:** Drag and drop or select PDFs to analyze.
+- **Conversational Q&A:** Ask natural language questions about the uploaded documents.
+- **AI-Powered Answers:** Uses embeddings and LLMs to generate factual, document-based responses.
+- **Document Management:** Easily remove or replace uploaded PDFs.
+- **Secure Access:** API key and Firebase authentication integration.
+- **Modern UI:** Responsive React frontend styled with Tailwind CSS.
+
+---
+
+## How It Works
+
+1. **PDF Processing:** Extract text from PDFs using LangChain’s `PyPDFLoader`.
+2. **Text Splitting:** Split text into chunks with `RecursiveCharacterTextSplitter` for optimal LLM context.
+3. **Embeddings:** Convert chunks into semantic vectors using HuggingFace models.
+4. **Vector Storage:** Store embeddings in Pinecone vector database for fast similarity search.
+5. **Question Answering:**  
+   - Convert user questions into embeddings.  
+   - Retrieve relevant document chunks from Pinecone.  
+   - Pass context and question to LLM (via Groq API) for answer generation.
+
+---
+
+## Tech Stack
+
+- **Backend:** FastAPI, Python, LangChain, Pinecone, Groq API, Firebase Admin SDK  
+- **Frontend:** React, Tailwind CSS, Firebase Authentication  
+- **AI & NLP:** HuggingFace Embeddings, Llama 3.3-70B via Groq  
+- **Database:** Pinecone Vector DB, Firestore  
+- **Deployment:** Railway (backend), Vercel (frontend)  
+- **Security:** API key validation, Firebase token verification, rate limiting
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (for frontend)  
+- Python 3.8+ (for backend)  
+- Pinecone account and API key  
+- Groq API key  
+- Firebase project and credentials
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/3N-VOY/aipdf.git
+   cd aipdf
+Setup Backend:
+bash
+Copy Code
+cd backend
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+Configure environment variables in .env file (API keys, Firebase, Pinecone, Groq).
+Run backend server:
+bash
+Copy Code
+uvicorn main:app --reload
+Setup Frontend:
+bash
+Copy Code
+cd ../frontend
+npm install
+npm run dev
+Open frontend at http://localhost:3000 and start using the app.
+Usage
+Upload a PDF document via the sidebar.
+Ask questions in the chat interface.
+View AI-generated answers with document context.
+Manage your uploaded documents easily.
+Deployment
+Backend deployed on Railway: [Railway Backend URL]
+Frontend deployed on Vercel: [Vercel Frontend URL]
+Security
+Firebase Authentication for user login.
+API keys generated per user with usage quotas.
+Rate limiting to prevent abuse.
+CORS configured to restrict backend access.
+Screenshots
+
+PDF upload interface
+
+
+Conversational Q&A interface
+
+Contributing
+Contributions and feedback are welcome! Please open issues or pull requests for improvements or bug fixes.
+
+License
+[Specify your license here, e.g., MIT License]
+
+Contact
+For questions or support, please contact [Your Name] at [your.email@example.com].
+
+Links
+GitHub Repository: https://github.com/3N-VOY/aipdf
+Live Demo: https://your-frontend-url.vercel.app

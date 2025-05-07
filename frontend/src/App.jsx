@@ -256,7 +256,7 @@ function App() {
       )}
 
       {/* Sidebar */}
-  <div
+      <div
         className={`md:relative fixed md:static top-0 left-0 w-[280px] bg-gray-800 border-r border-gray-700 z-50 transition-transform duration-300 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0 h-full md:h-auto`}
@@ -361,8 +361,6 @@ function App() {
           )}
 
           <div className="flex-1 bg-gray-800 rounded-lg shadow-xl border border-gray-700 flex flex-col mb-safe">
-            H LYDIA TON PAIRNEI RE MALAKA -
-            YOUR IPHONE HAS BEEN HACKED!
             <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.map((message, index) => (
                 <div
@@ -398,8 +396,7 @@ function App() {
             <form
               onSubmit={handleSubmit}
               className="p-4 flex gap-2 border-t border-gray-700 bg-gray-800/90 backdrop-blur sticky bottom-0"
-            > 
-  
+            >
               <input
                 type="text"
                 value={question}

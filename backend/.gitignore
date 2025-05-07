@@ -47,3 +47,5 @@ __pycache__/
 # Firebase credentials
 *.json
 .env
+venv/
+backend/venv

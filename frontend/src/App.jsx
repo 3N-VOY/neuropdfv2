@@ -10,6 +10,7 @@ import {
   Files,
   LogIn,
   LogOut,
+  Menu,
 } from "lucide-react";
 import { auth, signIn, signUp, logOut, signInWithGoogle } from "./firebase";
 import { useFingerprint } from "./hooks/useFingerprint";
@@ -20,13 +21,14 @@ function App() {
   const [question, setQuestion] = useState("");
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [apiKey, setApiKey] = useState(null);
   const [authModal, setAuthModal] = useState({ isOpen: false, mode: "signin" });
   const fingerprint = useFingerprint();
 
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://127.0.0.1:8000";
+  const BACKEND_URL =
+    import.meta.env.VITE_BACKEND_URL || "http://127.0.0.1:8000";
 
   const handleGoogleSignIn = async () => {
     try {
@@ -85,6 +87,7 @@ function App() {
       console.error("Error fetching API key:", error);
     }
   };
+
   const handleAuth = async (email, password) => {
     try {
       if (authModal.mode === "signup") {
@@ -93,7 +96,17 @@ function App() {
         await signIn(email, password);
       }
     } catch (error) {
-      throw new Error(error.message);
+      if (
+        error.message.includes("auth/email-already-in-use") &&
+        authModal.mode === "signup"
+      ) {
+        // Show a message or switch to Sign In mode
+        setAuthModal({ isOpen: true, mode: "signin" });
+        alert("This email is already registered. Please sign in instead.");
+        return;
+      }
+
+      alert(`Authentication error: ${error.message}`);
     }
   };
 
@@ -225,14 +238,30 @@ function App() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100 flex">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-gray-100 flex relative">
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-gray-800 rounded-lg shadow-lg hover:bg-gray-700 transition-colors"
+      >
+        <Menu className="h-6 w-6" />
+      </button>
+
+      {/* Overlay for mobile sidebar */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
       <div
-        className={`w-80 bg-gray-800 border-r border-gray-700 transition-all duration-300 ${
+        className={`md:relative fixed md:static top-0 left-0 w-[280px] bg-gray-800 border-r border-gray-700 z-50 transition-transform duration-300 transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
+        } md:translate-x-0 h-full md:h-auto`}
       >
-        <div className="p-4">
+        <div className="p-4 h-full overflow-y-auto">
           <div className="flex items-center justify-between mb-8">
             <div className="flex items-center gap-2">
               <Files className="h-6 w-6 text-blue-400" />
@@ -275,12 +304,12 @@ function App() {
             <div className="bg-gray-700 rounded-lg p-4 mb-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <FileText className="text-blue-400" />
+                  <FileText className="text-blue-400 flex-shrink-0" />
                   <span className="font-medium truncate">{file.name}</span>
                 </div>
                 <button
                   onClick={removeFile}
-                  className="text-gray-400 hover:text-red-400 transition-colors"
+                  className="text-gray-400 hover:text-red-400 transition-colors flex-shrink-0"
                 >
                   <Trash2 className="h-5 w-5" />
                 </button>
@@ -298,21 +327,21 @@ function App() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col">
-        <header className="text-center py-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
+      <div className="flex-1 flex flex-col min-h-screen">
+        <header className="text-center py-6 md:py-8 px-4">
+          <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent mb-2">
             PDF Q&A Assistant
           </h1>
-          <p className="text-gray-400">
+          <p className="text-gray-400 text-sm md:text-base">
             Upload a PDF and ask questions about its content
           </p>
         </header>
 
-        <div className="flex-1 max-w-4xl mx-auto w-full px-4 pb-4">
+        <div className="flex-1 max-w-4xl mx-auto w-full px-4 pb-4 flex flex-col">
           {!file && (
             <div
               {...getRootProps()}
-              className={`border-2 border-dashed rounded-lg p-8 text-center cursor-pointer transition-all
+              className={`border-2 border-dashed rounded-lg p-6 md:p-8 text-center cursor-pointer transition-all mb-4
                 ${
                   isDragActive
                     ? "border-blue-400 bg-gray-800/50"
@@ -320,29 +349,29 @@ function App() {
                 }`}
             >
               <input {...getInputProps()} />
-              <Upload className="mx-auto h-12 w-12 text-blue-400 mb-4" />
-              <p className="text-gray-400">
+              <Upload className="mx-auto h-10 w-10 md:h-12 md:w-12 text-blue-400 mb-4" />
+              <p className="text-gray-400 text-sm md:text-base">
                 {user
-                  ? "Drag & drop a PDF file here, or click to select one"
+                  ? "Drag & drop a PDF file here, or tap to select one"
                   : "Please log in to upload files"}
               </p>
             </div>
           )}
 
-          <div className="mt-6 bg-gray-800 rounded-lg shadow-xl border border-gray-700">
-            <div className="h-[400px] overflow-y-auto p-4 border-b border-gray-700">
+          <div className="flex-1 bg-gray-800 rounded-lg shadow-xl border border-gray-700 flex flex-col">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
               {messages.map((message, index) => (
                 <div
                   key={index}
-                  className={`mb-4 flex items-start gap-3 ${
+                  className={`flex items-start gap-3 animate-fade-in ${
                     message.type === "user" ? "justify-end" : ""
                   }`}
                 >
                   {message.type === "assistant" && (
-                    <Bot className="h-6 w-6 text-blue-400" />
+                    <Bot className="h-6 w-6 text-blue-400 flex-shrink-0" />
                   )}
                   <div
-                    className={`rounded-lg p-3 max-w-[80%] ${
+                    className={`rounded-lg p-3 max-w-[85%] md:max-w-[75%] break-words ${
                       message.type === "user"
                         ? "bg-blue-500 text-white"
                         : message.type === "system"
@@ -372,15 +401,15 @@ function App() {
                     ? "Ask a question about the PDF..."
                     : "Please log in to ask questions"
                 }
-                className="flex-1 rounded-lg bg-gray-700 border border-gray-600 px-4 py-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-blue-400"
+                className="flex-1 rounded-lg bg-gray-700 border border-gray-600 px-4 py-3 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-blue-400 text-sm md:text-base"
                 disabled={!file || loading || !user}
               />
               <button
                 type="submit"
                 disabled={!file || !question.trim() || loading || !user}
-                className="bg-blue-500 text-white rounded-lg px-4 py-2 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="bg-blue-500 text-white rounded-lg px-4 py-2 hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex-shrink-0"
               >
-                <Send className="h-5 w-5" />
+                <Send className="h-5 w-5 md:h-6 md:w-6" />
               </button>
             </form>
           </div>
@@ -393,6 +422,7 @@ function App() {
         onClose={() => setAuthModal({ ...authModal, isOpen: false })}
         onSubmit={handleAuth}
         onGoogleSignIn={handleGoogleSignIn}
+        switchMode={(newMode) => setAuthModal({ isOpen: true, mode: newMode })}
       />
     </div>
   );

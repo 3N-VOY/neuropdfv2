@@ -1,8 +1,10 @@
-# PDF Q&A Assistant
+# NeuroPDF - PDF Q&A Assistant 
 
 A full-stack AI-powered web application that lets you upload a PDF and ask questions about its content. It uses state-of-the-art 
 NLP techniques—Retrieval Augmented Generation (RAG), vector databases, and large language models (LLMs)—to provide accurate, 
 context-aware answers from your documents.
+
+Visit Live Website Link: neuropdf.alexanderxagoraris.com
 
 ## Features
 
